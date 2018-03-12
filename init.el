@@ -305,12 +305,12 @@ before packages are loaded. If you are unsure, you should try in setting them in
     (setq explicit-shell-file-name "/usr/bin/bash")
     (setq shell-file-name "bash")
 
-    (setq configuration-layer-elpa-archives
-      '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-        ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
-        ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+    (setq configuration-layer--elpa-archives
+    '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+      ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
+      ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 
-;;    (setq configuration-layer--elpa-archives
+    ;;    (setq configuration-layer--elpa-archives
 ;;     '(("melpa" . "https://elpa.emacs-china.org/melpa/")
 ;;            ("org"   . "https://elpa.emacs-china.org/org/")
 ;;            ("gnu"   . "https://elpa.emacs-china.org/gnu/")))
