@@ -43,6 +43,7 @@ values."
      auto-completion
      (c-c++ :variables c-c++-enable-clang-support t
             c-c++-default-mode-for-headers 'c++-mode)
+     syntax-checking ;; flycheck there
      semantic
      ;; better-defaults
      emacs-lisp
@@ -54,7 +55,7 @@ values."
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
      ;; spell-checking
-     ;; syntax-checking
+
      ;; version-control
      )
    ;; List of additional packages that will be installed without being
@@ -352,8 +353,6 @@ you should place your code here."
 
 
   ;; ### key bindings
-  ;; tab key for auto complete
-  (define-key evil-insert-state-map (kbd "?\t")  'company-auto-complete)
 
   ;; j for gj in vim, k for gk in vim
   (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
@@ -372,10 +371,15 @@ you should place your code here."
 
   ;; ### c++
   (setq auto-completion-enable-sort-by-usage t)
+  ;;(define-key  (kbd "?\t")  'company-auto-complete)
 
+  (define-key evil-normal-state-map (kbd "C-/") 'comment-line)
+  (define-key evil-insert-state-map (kbd "C-/") 'comment-line)
+  ;;(define-key evil-emacs-state-map (kbd "C-/") 'comment-line)
+  (define-key evil-hybrid-state-map (kbd "C-/") 'comment-line)
 ;  (define-key c-mode-map [(tab)] 'company-complete)  ;hava problem
 ;  (define-key c++-mode-map [(tab)] 'company-complete)
-
+  (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11")))
 
 
  )
@@ -389,7 +393,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data 2048-game org-category-capture alert log4e gntp markdown-mode helm-company helm-c-yasnippet company yasnippet auto-complete ws-butler winum volatile-highlights vi-tilde-fringe uuidgen toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode paradox spinner org-bullets open-junk-file neotree move-text lorem-ipsum linum-relative link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-ediff evil-args evil-anzu anzu eval-sexp-fu highlight dumb-jump define-word column-enforce-mode clean-aindent-mode auto-highlight-symbol aggressive-indent adaptive-wrap ace-link ace-jump-helm-line yapfify which-key wgrep use-package unfill stickyfunc-enhance srefactor smex pyvenv pytest pyenv-mode py-isort pip-requirements pcre2el org-projectile org-present org-pomodoro org-mime org-download mwim mmm-mode markdown-toc macrostep live-py-mode ivy-hydra hy-mode htmlize helm-make gnuplot gh-md fuzzy flx exec-path-from-shell evil-visualstar evil-escape elisp-slime-nav disaster diminish cython-mode counsel-projectile company-statistics company-c-headers company-anaconda cmake-mode clang-format bind-map auto-yasnippet auto-compile ace-window ac-ispell))))
+    (flycheck-pos-tip pos-tip flycheck flycheck-clangcheck web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data 2048-game org-category-capture alert log4e gntp markdown-mode helm-company helm-c-yasnippet company yasnippet auto-complete ws-butler winum volatile-highlights vi-tilde-fringe uuidgen toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode paradox spinner org-bullets open-junk-file neotree move-text lorem-ipsum linum-relative link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-ediff evil-args evil-anzu anzu eval-sexp-fu highlight dumb-jump define-word column-enforce-mode clean-aindent-mode auto-highlight-symbol aggressive-indent adaptive-wrap ace-link ace-jump-helm-line yapfify which-key wgrep use-package unfill stickyfunc-enhance srefactor smex pyvenv pytest pyenv-mode py-isort pip-requirements pcre2el org-projectile org-present org-pomodoro org-mime org-download mwim mmm-mode markdown-toc macrostep live-py-mode ivy-hydra hy-mode htmlize helm-make gnuplot gh-md fuzzy flx exec-path-from-shell evil-visualstar evil-escape elisp-slime-nav disaster diminish cython-mode counsel-projectile company-statistics company-c-headers company-anaconda cmake-mode clang-format bind-map auto-yasnippet auto-compile ace-window ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
