@@ -41,14 +41,21 @@ values."
      ;; ----------------------------------------------------------------
      helm
      auto-completion
-     (c-c++ :variables c-c++-enable-clang-support t
+     (c-c++ :variables
+            c-c++-enable-clang-support t
             c-c++-default-mode-for-headers 'c++-mode)
      syntax-checking ;; flycheck there
      semantic
      ;; better-defaults
      emacs-lisp
      ;; git
-     markdown
+
+     (markdown :variables
+               ;;markdown-live-preview-engine 'vmd
+               markdown-fontify-code-blocks-natively t ;; for code block rendering
+               )
+     ;; vmd install needed by "sudo npm install -g vmd --unsafe-perm=true --allow-root"
+     ;;markdown
      org
      myGame
      ;; (shell :variables
@@ -57,12 +64,14 @@ values."
      ;; spell-checking
 
      ;; version-control
+     (python :variables python-enable-yapf-format-on-save t)
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(
+                                      yasnippet-snippets)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -312,23 +321,37 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+  ;; ### normal setting
 
-    (setq configuration-layer--elpa-archives
+  ;; line number
+  (setq-default dotspacemacs-line-numbers '(:relative nil
+                                                       :enabled-for-modes c++-mode
+                                                       :disabled-for-modes dired-mode
+                                                       doc-view-mode
+                                                       markdown-mode
+                                                       org-mode
+                                                       pdf-view-mode
+                                                       text-mode
+                                                       :size-limit-kb 1000))
+
+
+  (setq configuration-layer--elpa-archives
         '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
           ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
           ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 
-    ;; c++
-;;    (setq-default dotspacemacs-configuration-layers
-;;                  '((c-c++ :variables
-;;                           c-c++-enable-clang-support t
-;;                           c-c++-default-mode-for-headers 'c++-mode)))
+  ;; c++
+  ;;    (setq-default dotspacemacs-configuration-layers
+  ;;                  '((c-c++ :variables
+  ;;                           c-c++-enable-clang-support t
+  ;;                           c-c++-default-mode-for-headers 'c++-mode)))
 
-   ;; (setq-default helm-make-build-dir "Apps/build")
+  ;; (setq-default helm-make-build-dir "Apps/build")
 
-    ;;(setq-default dotspacemacs-auto-resume-layouts t)
+  ;;(setq-default dotspacemacs-auto-resume-layouts t)
 
-
+  ;; python
+  ;;(add-to-list 'python-shell-extra-pythonpaths "/usr/lib/python3.6/site-packages")
 
 )
 
@@ -339,6 +362,15 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+
+  (setq x-select-enable-clipboard-manager nil)
+  ;; hang when close the emacs
+
+
+  ;; copy ~/.emacs.d/elpa/yasnippet-snippets-20180503.657/snippets
+  ;; to the directory (to be repair in the new spacemacs version)
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets" )) ;; personal snippets
+
 
   ;; ### org
   ;; change a line if the line is too long
@@ -358,6 +390,8 @@ you should place your code here."
   (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
   (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
 
+  ;; for evil-jump-to-tag to evil-
+  (define-key evil-normal-state-map (kbd "C-]") 'evil-goto-definition)
 
   ;; ### problem of semantic
   ;; to solve the problem which make the lisp editing vary slow by limit the
@@ -393,7 +427,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flycheck-pos-tip pos-tip flycheck flycheck-clangcheck web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data 2048-game org-category-capture alert log4e gntp markdown-mode helm-company helm-c-yasnippet company yasnippet auto-complete ws-butler winum volatile-highlights vi-tilde-fringe uuidgen toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode paradox spinner org-bullets open-junk-file neotree move-text lorem-ipsum linum-relative link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-ediff evil-args evil-anzu anzu eval-sexp-fu highlight dumb-jump define-word column-enforce-mode clean-aindent-mode auto-highlight-symbol aggressive-indent adaptive-wrap ace-link ace-jump-helm-line yapfify which-key wgrep use-package unfill stickyfunc-enhance srefactor smex pyvenv pytest pyenv-mode py-isort pip-requirements pcre2el org-projectile org-present org-pomodoro org-mime org-download mwim mmm-mode markdown-toc macrostep live-py-mode ivy-hydra hy-mode htmlize helm-make gnuplot gh-md fuzzy flx exec-path-from-shell evil-visualstar evil-escape elisp-slime-nav disaster diminish cython-mode counsel-projectile company-statistics company-c-headers company-anaconda cmake-mode clang-format bind-map auto-yasnippet auto-compile ace-window ac-ispell))))
+    (yasnippet-snippets vmd-mode dash-functional helm-pydoc anaconda-mode pythonic flycheck-pos-tip pos-tip flycheck flycheck-clangcheck web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data 2048-game org-category-capture alert log4e gntp markdown-mode helm-company helm-c-yasnippet company yasnippet auto-complete ws-butler winum volatile-highlights vi-tilde-fringe uuidgen toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode paradox spinner org-bullets open-junk-file neotree move-text lorem-ipsum linum-relative link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-ediff evil-args evil-anzu anzu eval-sexp-fu highlight dumb-jump define-word column-enforce-mode clean-aindent-mode auto-highlight-symbol aggressive-indent adaptive-wrap ace-link ace-jump-helm-line yapfify which-key wgrep use-package unfill stickyfunc-enhance srefactor smex pyvenv pytest pyenv-mode py-isort pip-requirements pcre2el org-projectile org-present org-pomodoro org-mime org-download mwim mmm-mode markdown-toc macrostep live-py-mode ivy-hydra hy-mode htmlize helm-make gnuplot gh-md fuzzy flx exec-path-from-shell evil-visualstar evil-escape elisp-slime-nav disaster diminish cython-mode counsel-projectile company-statistics company-c-headers company-anaconda cmake-mode clang-format bind-map auto-yasnippet auto-compile ace-window ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
